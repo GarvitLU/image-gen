@@ -45,29 +45,33 @@ class ThumbnailGenerator:
         return hook.upper()
     
     def generate_prompt(self, topic, hook_text):
-        """Create a clean thumbnail: EXACT hook text + person only (no logos/UI)"""
+        """Create a clean thumbnail: EXACT hook text + person only (no tech company logos/UI), with optional speaker elements and dark themes"""
         return f"""Design a YouTube-style thumbnail for "{topic}" with ONLY two elements:
         1) the EXACT hook text: "{hook_text}" (render this as the ONLY text)
-        2) a professional person portrait (waist-up or headshot) looking at camera
+        2) a professional person portrait (waist-up or headshot)
 
         Composition and style:
         - Text on one side, person on the other; clear separation
-        - Vibrant, colorful background (solid or subtle gradient) with strong contrast
+        - Background can be either: (a) deep black/dark with high-contrast accents, or (b) vibrant color gradient; vary styles across thumbnails
+        - Add tasteful speaker/presenter cues: handheld microphone or headset mic, natural hand gestures, subtle stage/spotlight rim light, minimal glow
+        - Optional bold shapes/stripes behind text for contrast; keep minimal
         - Big typography; subtle outline/shadow allowed for readability
-        - Modern, minimal, premium look
+        - Modern, premium, energetic look without clutter
 
         Strict constraints:
         - Render ONLY this text: "{hook_text}". Do not add any other words, numbers, badges, subtitles, or symbols
-        - ZERO logos or branding (YouTube, TED, Microsoft, Python or any icons)
+        - ZERO tech company logos (YouTube, Google, Microsoft, Apple, Meta, Twitter, LinkedIn, etc.)
+        - Technology logos are OK (Python, JavaScript, React, etc.) - these are programming languages, not companies
         - NO timestamps/durations (e.g., 5:29, 11:48, 2:02:21)
         - NO badges, playlists, counters (e.g., 9 videos), watermarks, corner tags
-        - NO labels like "Ex-Microsoft", "Variables & Data Types", or topic outlines
+        - NO labels like "Ex-Microsoft", syllabus lines, or topic outlines
         - NO UI elements: buttons, menus, share icons, play buttons, dots, progress bars, carousels, profile chips
         - NO random small or fake text anywhere
 
         Content rules:
-        - One person (max two); business-casual attire; friendly, confident expression
+        - One person (max two); business-casual attire; confident, engaging expression
         - Keep layout uncluttered; emphasize the hook text and the person only
+        - Use strong contrast so the text pops on dark or colorful backgrounds
         """
     
     def generate_thumbnail(self, topic, options=None):
