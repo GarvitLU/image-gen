@@ -9,7 +9,7 @@ def generate_from_file():
         generator = ThumbnailGenerator()
         
         # Read course names from the text file
-        courses_file = 'course-test.txt'
+        courses_file = 'course.txt'
         
         if not Path(courses_file).exists():
             print(f"❌ File '{courses_file}' not found!")

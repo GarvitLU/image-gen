@@ -1,10 +1,50 @@
-INTERPERSONAL SKILLS FOR STRONGER TEAMS & SMARTER WORK
-Master the Art of Persuasion, Clarity, and Confidence
-A Modern Playbook for Managing People
-Build trust, overcome resistance, and create win-win outcomes
-Practical Tools for Resolving Workplace Tensions
-Mastering Communication for Clarity, Confidence, and Impact
-The Skill Every Leader Needs
-The Modern Guide to Workplace Well-being
-The Modern Guide to Putting Customers First
-The Modern Guide to People Leadership
+1	Effective Business Communication
+2	Presentation & Public Speaking
+3	Professional Email & Business Writing
+4	The Complete Communication Skills Master Class for Life
+5	Writing With Flair: How To Become An Exceptional Writer
+6	Email Etiquette: Write More Effective Emails At Work
+7	Cross-cultural Communication
+8	Feedback & Performance Conversations
+9	Emotional Intelligence for Teams
+10	Conflict Resolution & Negotiation
+11	Conflict Management with Emotional Intelligence
+12	Master Your Emotions During Conflict
+13	Team Collaboration & Trust Building
+14	Building Influence without Authority
+15	Managing Up: Communicating with Your Manager
+16	Personal Accountability at Work
+17	Leadership Fundamentals
+18	Leadership: Practical Leadership Skills
+19	Management Skills Training for New & Experienced Managers
+20	New Manager: The Basics and More of Being a Great Leader
+21	The Science of Leadership
+22	Think Like a Leader with Brian Tracy
+23	How to Manage & Influence Your Virtual Team
+24	Performance Management: Build a High Performing Team
+25	Manager's Guide to Effective 1:1 Meetings
+26	Be a Great Mentor: A Practical Guide to Mentorship
+27	Workplace Diversity & Inclusion
+28	Unconscious Bias: Fuel Diversity and Become a Better You
+29	Diversity and Inclusion in the Workplace
+30	Workplace Etiquette & Professionalism
+31	Time Management & Productivity
+32	Time Management Mastery: Do More, Stress Less
+33	Productivity and Time Management for the Overwhelmed
+34	Stress Management & Resilience
+35	Adaptability in a Changing Workplace
+36	Building a Growth Mindset
+37	Innovation & Creative Thinking
+38	Critical Thinking Strategies For Better Decisions
+39	Anti-Harassment & Workplace Conduct
+40	Equal Opportunity & Non-Discrimination
+41	Ethics, Fraud & Anti-Money Laundering
+42	Anti Money Laundering (AML / CFT) Compliance Requirements
+43	Data Privacy & Protection
+44	Environmental Regulations & Sustainability
+45	Workplace Safety & Health Compliance
+46	Emergency Preparedness & Crisis Management
+47	Generative AI for Business Leaders: A Quick Overview
+48	Change Management for Leaders: Lead Like a Lion
+49	Become a Product Manager | Learn the Skills & Get the Job
+50	Email Etiquette: Write More Effective Emails At Work

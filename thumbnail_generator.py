@@ -29,51 +29,49 @@ class ThumbnailGenerator:
     def generate_hook_text(self, topic: str) -> str:
         """Create a short 2-4 word hook from the topic; uppercase for strong impact"""
         text = topic
-        # Remove common filler words
-        text = re.sub(r'\b(introduction to|intro to|fundamentals|basics|beginner|complete|masterclass|course|101)\b', '', text, flags=re.IGNORECASE)
-        # Collapse spaces
+        text = re.sub(
+            r'\b(introduction to|intro to|fundamentals|basics|beginner|complete|masterclass|course|101)\b',
+            '',
+            text,
+            flags=re.IGNORECASE
+        )
         text = re.sub(r'\s+', ' ', text).strip()
         if not text:
             text = topic
-        # Prefer 'Master <Topic>' if topic is noun-y
         words = text.split()
         if len(words) <= 2:
             hook = f"Master {text}".strip()
         else:
-            # Take top 2-3 keywords
             hook = ' '.join(words[:3])
         return hook.upper()
     
     def generate_prompt(self, topic, hook_text):
-        """Create a clean thumbnail: EXACT hook text + person only (no tech company logos/UI), with optional speaker elements and dark themes"""
-        return f"""Design a YouTube-style thumbnail for "{topic}" with ONLY two elements:
-        1) the EXACT hook text: "{hook_text}" (render this as the ONLY text)
-        2) a professional person portrait (waist-up or headshot)
+        """Create a clean thumbnail prompt"""
+        return f"""
+Design a YouTube-style thumbnail for "{topic}" with ONLY two elements:
+1) the EXACT hook text: "{hook_text}"
+2) a professional person portrait (waist-up or headshot)
 
-        Composition and style:
-        - Text on one side, person on the other; clear separation
-        - Background can be either: (a) deep black/dark with high-contrast accents, or (b) vibrant color gradient; vary styles across thumbnails
-        - Add tasteful speaker/presenter cues: handheld microphone or headset mic, natural hand gestures, subtle stage/spotlight rim light, minimal glow
-        - Optional bold shapes/stripes behind text for contrast; keep minimal
-        - Big typography; subtle outline/shadow allowed for readability
-        - Modern, premium, energetic look without clutter
+Composition and style:
+- Text on one side, person on the other; clear separation
+- Background can be deep black/dark with contrast accents or vibrant gradient
+- Add tasteful speaker cues: microphone or headset, natural hand gestures, subtle lighting
+- Optional bold shapes behind text for contrast; minimal
+- Big typography; subtle outline/shadow for readability
+- Modern, premium, energetic look without clutter
 
-        Strict constraints:
-        - Render ONLY this text: "{hook_text}". Do not add any other words, numbers, badges, subtitles, or symbols
-        - ZERO tech company logos (YouTube, Google, Microsoft, Apple, Meta, Twitter, LinkedIn, etc.)
-        - Technology logos are OK (Python, JavaScript, React, etc.) - these are programming languages, not companies
-        - NO timestamps/durations (e.g., 5:29, 11:48, 2:02:21)
-        - NO badges, playlists, counters (e.g., 9 videos), watermarks, corner tags
-        - NO labels like "Ex-Microsoft", syllabus lines, or topic outlines
-        - NO UI elements: buttons, menus, share icons, play buttons, dots, progress bars, carousels, profile chips
-        - NO random small or fake text anywhere
+Strict constraints:
+- Render ONLY this text: "{hook_text}"
+- Absolutely NO logos, icons, symbols, or badges of any kind
+- NO timestamps, watermarks, corner tags, or UI elements
+- NO small or fake text anywhere
 
-        Content rules:
-        - One person (max two); business-casual attire; confident, engaging expression
-        - Keep layout uncluttered; emphasize the hook text and the person only
-        - Use strong contrast so the text pops on dark or colorful backgrounds
-        """
-    
+Content rules:
+- One person (max two); business-casual attire; confident expression
+- Keep layout uncluttered; emphasize text and person only
+- Use strong contrast to make the text pop
+"""
+
     def generate_thumbnail(self, topic, options=None):
         """Generate a single thumbnail for a course topic"""
         if options is None:
@@ -81,7 +79,6 @@ class ThumbnailGenerator:
         
         try:
             print(f"Generating thumbnail for: {topic}")
-            
             hook_text = self.generate_hook_text(topic)
             prompt = self.generate_prompt(topic, hook_text)
             aspect_ratio = options.get("aspect_ratio", "16x9")
@@ -95,16 +92,21 @@ class ThumbnailGenerator:
             
             data = {
                 "prompt": prompt,
-                "rendering_speed": "TURBO",  # Fastest rendering
+                "negative_prompt": (
+                    "logos, company logos, YouTube logo, Google logo, "
+                    "Microsoft logo, Apple logo, Meta logo, LinkedIn logo, Twitter logo, "
+                    "social media icons, badges, timestamps, watermarks, UI elements, overlays, fake text"
+                ),
+                "rendering_speed": "TURBO",
                 "aspect_ratio": aspect_ratio,
-                "quality": "standard"  # Faster than high quality
+                "quality": "standard"
             }
             
             response = requests.post(
                 "https://api.ideogram.ai/v1/ideogram-v3/generate",
                 headers=headers,
                 json=data,
-                timeout=30  # Reduced timeout for faster failure detection
+                timeout=30
             )
             
             if response.status_code == 200:
@@ -113,7 +115,6 @@ class ThumbnailGenerator:
                     image_url = data['data'][0]['url']
                     print('Thumbnail generated successfully!')
                     
-                    # Download and save the image
                     file_name = self.sanitize_filename(topic)
                     file_path = Path(self.output_dir) / f"{file_name}.png"
                     
@@ -134,10 +135,9 @@ class ThumbnailGenerator:
     
     def sanitize_filename(self, topic):
         """Sanitize the topic name for use as a filename"""
-        # Remove special characters and replace spaces with hyphens
         sanitized = re.sub(r'[^a-zA-Z0-9\s-]', '', topic.lower())
         sanitized = re.sub(r'\s+', '-', sanitized)
-        return sanitized[:50]  # Limit length
+        return sanitized[:50]
     
     def download_and_save_image(self, image_url, file_path):
         """Download and save the image from URL"""
@@ -169,7 +169,6 @@ class ThumbnailGenerator:
                 print(f'Failed to generate thumbnail for "{topic}": {error}')
                 results.append({'topic': topic, 'error': str(error), 'success': False})
             
-            # Add a small delay between requests to be respectful to the API
             time.sleep(1)
         
         return results
@@ -180,15 +179,13 @@ def main():
     try:
         generator = ThumbnailGenerator()
         
-        # Test with only 2 courses
         course_topics = [
             "Machine Learning Fundamentals",
             "Effective Business Communication"
         ]
         
-        print('🚀 Starting thumbnail generation (testing 2 courses)...\n')
+        print('🚀 Starting thumbnail generation...\n')
         
-        # Generate thumbnails for all topics
         results = generator.generate_multiple_thumbnails(course_topics, {
             "aspect_ratio": "16x9"
         })
@@ -206,4 +203,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main() 
+    main()
