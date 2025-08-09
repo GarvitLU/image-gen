@@ -1,5 +1,6 @@
 from thumbnail_generator import ThumbnailGenerator
 from pathlib import Path
+import re
 
 def generate_from_file():
     """Generate thumbnails from course names in a text file"""
@@ -19,10 +20,12 @@ def generate_from_file():
         with open(courses_file, 'r', encoding='utf-8') as file:
             file_content = file.read()
         
-        course_topics = [
-            line.strip() for line in file_content.split('\n')
-            if line.strip()  # Remove empty lines
-        ]
+        course_topics = []
+        for line in file_content.split('\n'):
+            if line.strip():
+                # Remove numbers at the beginning of each line
+                cleaned_line = re.sub(r'^\d+\s*', '', line.strip())
+                course_topics.append(cleaned_line)
         
         if not course_topics:
             print(f"❌ No course names found in '{courses_file}'")

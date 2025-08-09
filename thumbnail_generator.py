@@ -29,12 +29,15 @@ class ThumbnailGenerator:
     def generate_hook_text(self, topic: str) -> str:
         """Create a short 2-4 word hook from the topic; uppercase for strong impact"""
         text = topic
+        # Remove common words and numbers
         text = re.sub(
-            r'\b(introduction to|intro to|fundamentals|basics|beginner|complete|masterclass|course|101)\b',
+            r'\b(introduction to|intro to|fundamentals|basics|beginner|complete|masterclass|course|101|the|a|an|and|or|but|in|on|at|to|for|of|with|by)\b',
             '',
             text,
             flags=re.IGNORECASE
         )
+        # Remove any numbers at the beginning
+        text = re.sub(r'^\d+\s*', '', text)
         text = re.sub(r'\s+', ' ', text).strip()
         if not text:
             text = topic
@@ -46,8 +49,12 @@ class ThumbnailGenerator:
         return hook.upper()
     
     def generate_prompt(self, topic, hook_text):
-        """Create a clean thumbnail prompt"""
-        return f"""
+        """Create a clean thumbnail prompt with variety"""
+        import random
+        
+        # Different style variations
+        style_variations = [
+            f"""
 Design a YouTube-style thumbnail for "{topic}" with ONLY two elements:
 1) the EXACT hook text: "{hook_text}"
 2) a professional person portrait (waist-up or headshot)
@@ -70,7 +77,50 @@ Content rules:
 - One person (max two); business-casual attire; confident expression
 - Keep layout uncluttered; emphasize text and person only
 - Use strong contrast to make the text pop
+""",
+            f"""
+Create a professional course thumbnail for "{topic}" featuring:
+1) the EXACT hook text: "{hook_text}"
+2) a confident business professional (headshot or waist-up)
+
+Design elements:
+- Clean, modern layout with text prominently displayed
+- Professional color scheme with gradients or solid backgrounds
+- Subtle geometric shapes or patterns for visual interest
+- Professional attire and confident body language
+- High contrast for readability
+
+Constraints:
+- Render ONLY this text: "{hook_text}"
+- NO logos, icons, or decorative elements
+- NO watermarks or timestamps
+- Clean, uncluttered design
+
+Style: Corporate, professional, trustworthy
+""",
+            f"""
+Design an engaging thumbnail for "{topic}" with:
+1) the EXACT hook text: "{hook_text}"
+2) a dynamic professional portrait
+
+Visual style:
+- Bold, modern typography with the text as the hero element
+- Professional person with engaging expression and natural gestures
+- Background with subtle gradients or professional patterns
+- Clean composition with strong visual hierarchy
+- Professional color palette with accent colors
+
+Requirements:
+- Render ONLY this text: "{hook_text}"
+- NO additional text, logos, or decorative elements
+- NO watermarks or timestamps
+- Professional, trustworthy appearance
+
+Focus: Clear communication of the course topic through text and professional imagery
 """
+        ]
+        
+        return random.choice(style_variations)
 
     def generate_thumbnail(self, topic, options=None):
         """Generate a single thumbnail for a course topic"""
@@ -155,21 +205,31 @@ Content rules:
             raise error
     
     def generate_multiple_thumbnails(self, topics, options=None):
-        """Generate thumbnails for multiple course topics"""
+        """Generate thumbnails for multiple course topics with variety"""
         if options is None:
             options = {}
         
         results = []
+        import random
         
-        for topic in topics:
+        # Different aspect ratios for variety
+        aspect_ratios = ["16x9", "16x9", "16x9", "16x9", "16x9"]  # Mostly 16x9 but can add others
+        
+        for i, topic in enumerate(topics):
             try:
-                file_path = self.generate_thumbnail(topic, options)
+                # Add some variety to options
+                current_options = options.copy()
+                if i % 3 == 0:  # Every 3rd thumbnail gets different styling
+                    current_options["aspect_ratio"] = random.choice(aspect_ratios)
+                
+                file_path = self.generate_thumbnail(topic, current_options)
                 results.append({'topic': topic, 'file_path': file_path, 'success': True})
             except Exception as error:
                 print(f'Failed to generate thumbnail for "{topic}": {error}')
                 results.append({'topic': topic, 'error': str(error), 'success': False})
             
-            time.sleep(1)
+            # Random delay between 1-3 seconds to avoid rate limiting
+            time.sleep(random.uniform(1, 3))
         
         return results
 
@@ -180,9 +240,16 @@ def main():
         generator = ThumbnailGenerator()
         
         course_topics = [
-            "Machine Learning Fundamentals",
-            "Effective Business Communication"
-        ]
+            "Grammar & Proofreading for Professionals",
+"Inclusive Language in the Workplace",
+"Problem Framing & Root Cause Analysis",
+"Reverse Mentoring for Cross-Generational Learning",
+"Role Clarity & Expectation Management",
+"Running Effective Remote Meetings",
+"Strategic Thinking for Individual Contributors",
+"Writing for Executives: Briefs & Summaries"  
+
+]
         
         print('🚀 Starting thumbnail generation...\n')
         
